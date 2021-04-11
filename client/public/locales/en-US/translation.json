@@ -1,0 +1,10 @@
+{
+	"login": {
+		"User": "User",
+		"Login": "Login",
+		"Password": "Password",
+		"Network": "Network",
+		"Sign In": "Sign In",
+		"Connect": "Connect"
+	}
+}

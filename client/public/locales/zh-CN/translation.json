@@ -1,0 +1,10 @@
+{
+	"login": {
+		"User": "用户名",
+		"Login": "网络名",
+		"Password": "密码",
+		"Network": "网络名",
+		"Sign In": "登陆",
+		"Connect": "连接"
+	}
+}

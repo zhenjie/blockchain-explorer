@@ -24,6 +24,7 @@ import PersonIcon from '@material-ui/icons/Person';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 
 import { shape, string } from 'prop-types';
+import { withTranslation } from 'react-i18next';
 
 import { authSelectors, authOperations } from '../../state/redux/auth';
 
@@ -196,7 +197,7 @@ export class Login extends Component {
 			authEnabled,
 			isLoading
 		} = this.state;
-		const { classes, error } = this.props;
+		const { classes, error, t } = this.props;
 
 		return (
 			<div className={classes.container}>
@@ -205,7 +206,7 @@ export class Login extends Component {
 						<LockOutlinedIcon />
 					</Avatar>
 					<Typography component="h5" variant="headline">
-						Sign in
+						{t('login.Sign In')}
 					</Typography>
 					<form className={classes.form} onSubmit={this.submitForm}>
 						<FormControl margin="normal" required fullWidth>
@@ -215,7 +216,7 @@ export class Login extends Component {
 								select
 								id="network"
 								name="network"
-								label="Network"
+								label={t('login.Network')}
 								disabled={isLoading}
 								value={network.value}
 								onChange={e => this.handleChange(e)}
@@ -249,7 +250,7 @@ export class Login extends Component {
 									fullWidth
 									id="user"
 									name="user"
-									label="User"
+									label={t('login.User')}
 									disabled={isLoading}
 									value={user.value}
 									onChange={e => this.handleChange(e)}
@@ -279,7 +280,7 @@ export class Login extends Component {
 									id="password"
 									type="password"
 									name="password"
-									label="Password"
+									label={t('login.Password')}
 									disabled={isLoading}
 									value={password.value}
 									onChange={e => this.handleChange(e)}
@@ -317,7 +318,7 @@ export class Login extends Component {
 							color="primary"
 							className={classes.submit}
 						>
-							{authEnabled ? 'Sign in' : 'Connect'}
+							{authEnabled ? t('login.Sign In') : t('login.Connect')}
 						</Button>
 					</form>
 				</Paper>
@@ -329,6 +330,7 @@ export class Login extends Component {
 const { authSelector, errorSelector, networkSelector } = authSelectors;
 
 export default compose(
+	withTranslation(),
 	withStyles(styles),
 	connect(
 		state => ({

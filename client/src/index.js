@@ -5,6 +5,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
+import './i18n';
 import createStore from './state/store';
 import authOperations from './state/redux/auth/operations';
 import Theme from './components/Theme';
