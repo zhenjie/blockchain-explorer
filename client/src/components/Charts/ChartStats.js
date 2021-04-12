@@ -6,6 +6,7 @@ import React, { Component } from 'react';
 import compose from 'recompose/compose';
 import { withStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
+import { withTranslation } from 'react-i18next';
 import moment from 'moment-timezone';
 import { TabContent, TabPane, Nav, NavItem, NavLink } from 'reactstrap';
 import classnames from 'classnames';
@@ -112,7 +113,8 @@ export class ChartStats extends Component {
 			blockPerMin,
 			transactionPerHour,
 			transactionPerMin,
-			classes
+			classes,
+			t
 		} = this.props;
 
 		return (
@@ -127,7 +129,7 @@ export class ChartStats extends Component {
 								this.toggle('1');
 							}}
 						>
-							BLOCKS / HOUR
+							{t('BLOCKS / HOUR')}
 						</NavLink>
 					</NavItem>
 					<NavItem>
@@ -139,7 +141,7 @@ export class ChartStats extends Component {
 								this.toggle('2');
 							}}
 						>
-							BLOCKS / MIN
+							{t('BLOCKS / MIN')}
 						</NavLink>
 					</NavItem>
 					<NavItem>
@@ -151,7 +153,7 @@ export class ChartStats extends Component {
 								this.toggle('3');
 							}}
 						>
-							TX / HOUR
+							{t('TX / HOUR')}
 						</NavLink>
 					</NavItem>
 					<NavItem>
@@ -163,7 +165,7 @@ export class ChartStats extends Component {
 								this.toggle('4');
 							}}
 						>
-							TX / MIN
+							{t('TX / MIN')}
 						</NavLink>
 					</NavItem>
 				</Nav>
@@ -199,6 +201,7 @@ ChartStats.propTypes = {
 };
 
 export default compose(
+	withTranslation(),
 	withStyles(styles),
 	connect(
 		state => ({

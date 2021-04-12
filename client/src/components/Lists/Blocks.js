@@ -6,6 +6,8 @@ import React, { Component } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import Dialog from '@material-ui/core/Dialog';
 import { Button } from 'reactstrap';
+import compose from 'recompose/compose';
+import { withTranslation } from 'react-i18next';
 import matchSorter from 'match-sorter';
 import find from 'lodash/find';
 import moment from 'moment';
@@ -147,16 +149,17 @@ export class Blocks extends Component {
 		clearInterval(this.interVal);
 	}
 
-	handleCustomRender(selected, options) {
+	handleCustomRender = (selected, options) => {
+		const { t } = this.props;
 		if (selected.length === 0) {
-			return 'Select Orgs';
+			return t('Select Orgs');
 		}
 		if (selected.length === options.length) {
-			return 'All Orgs Selected';
+			return t('All Orgs Selected');
 		}
 
 		return selected.join(',');
-	}
+	};
 
 	searchBlockList = async channel => {
 		let query = `from=${new Date(this.state.from).toString()}&&to=${new Date(
@@ -174,6 +177,7 @@ export class Blocks extends Component {
 
 	handleDialogOpen = async tid => {
 		const { getTransaction, currentChannel } = this.props;
+
 		await getTransaction(currentChannel, tid);
 		this.setState({ dialogOpen: true });
 	};
@@ -232,190 +236,193 @@ export class Blocks extends Component {
 		this.setState({ selection: data });
 	};
 
-	reactTableSetup = classes => [
-		{
-			Header: 'Block Number',
-			accessor: 'blocknum',
-			filterMethod: (filter, rows) =>
-				matchSorter(
-					rows,
-					filter.value,
-					{ keys: ['blocknum'] },
-					{ threshold: matchSorter.rankings.SIMPLEMATCH }
+	reactTableSetup = classes => {
+		const { t } = this.props;
+		return [
+			{
+				Header: t('Block Number'),
+				accessor: 'blocknum',
+				filterMethod: (filter, rows) =>
+					matchSorter(
+						rows,
+						filter.value,
+						{ keys: ['blocknum'] },
+						{ threshold: matchSorter.rankings.SIMPLEMATCH }
+					),
+				filterAll: true,
+				width: 150
+			},
+			{
+				Header: t('Channel Name'),
+				accessor: 'channelname',
+				filterMethod: (filter, rows) =>
+					matchSorter(
+						rows,
+						filter.value,
+						{ keys: ['channelname'] },
+						{ threshold: matchSorter.rankings.SIMPLEMATCH }
+					),
+				filterAll: true
+			},
+			{
+				Header: t('Number of Tx'),
+				accessor: 'txcount',
+				filterMethod: (filter, rows) =>
+					matchSorter(
+						rows,
+						filter.value,
+						{ keys: ['txcount'] },
+						{ threshold: matchSorter.rankings.SIMPLEMATCH }
+					),
+				filterAll: true,
+				width: 150
+			},
+			{
+				Header: t('Data Hash'),
+				accessor: 'datahash',
+				className: classes.hash,
+				Cell: row => (
+					<span>
+						<ul className={classes.partialHash} href="#/blocks">
+							<div className={classes.fullHash} id="showTransactionId">
+								{row.value}
+							</div>{' '}
+							{row.value.slice(0, 6)} {!row.value ? '' : '... '}
+						</ul>{' '}
+					</span>
 				),
-			filterAll: true,
-			width: 150
-		},
-		{
-			Header: 'Channel Name',
-			accessor: 'channelname',
-			filterMethod: (filter, rows) =>
-				matchSorter(
-					rows,
-					filter.value,
-					{ keys: ['channelname'] },
-					{ threshold: matchSorter.rankings.SIMPLEMATCH }
+				filterMethod: (filter, rows) =>
+					matchSorter(
+						rows,
+						filter.value,
+						{ keys: ['datahash'] },
+						{ threshold: matchSorter.rankings.SIMPLEMATCH }
+					),
+				filterAll: true
+			},
+			{
+				Header: t('Block Hash'),
+				accessor: 'blockhash',
+				className: classes.hash,
+				Cell: row => (
+					<span>
+						<a
+							data-command="block-partial-hash"
+							className={classes.partialHash}
+							onClick={() => this.handleDialogOpenBlockHash(row.value)}
+							href="#/blocks"
+						>
+							<div className={classes.fullHash} id="showTransactionId">
+								{row.value}
+							</div>{' '}
+							{row.value.slice(0, 6)} {!row.value ? '' : '... '}
+						</a>{' '}
+					</span>
 				),
-			filterAll: true
-		},
-		{
-			Header: 'Number of Tx',
-			accessor: 'txcount',
-			filterMethod: (filter, rows) =>
-				matchSorter(
-					rows,
-					filter.value,
-					{ keys: ['txcount'] },
-					{ threshold: matchSorter.rankings.SIMPLEMATCH }
+				filterMethod: (filter, rows) =>
+					matchSorter(
+						rows,
+						filter.value,
+						{ keys: ['blockhash'] },
+						{ threshold: matchSorter.rankings.SIMPLEMATCH }
+					),
+				filterAll: true
+			},
+			{
+				Header: t('Previous Hash'),
+				accessor: 'prehash',
+				className: classes.hash,
+				Cell: row => (
+					<span>
+						<ul
+							className={classes.partialHash}
+							onClick={() => this.handleDialogOpenBlockHash(row.value)}
+							href="#/blocks"
+						>
+							<div className={classes.fullHash} id="showTransactionId">
+								{row.value}
+							</div>{' '}
+							{row.value.slice(0, 6)} {!row.value ? '' : '... '}
+						</ul>{' '}
+					</span>
 				),
-			filterAll: true,
-			width: 150
-		},
-		{
-			Header: 'Data Hash',
-			accessor: 'datahash',
-			className: classes.hash,
-			Cell: row => (
-				<span>
-					<ul className={classes.partialHash} href="#/blocks">
-						<div className={classes.fullHash} id="showTransactionId">
-							{row.value}
-						</div>{' '}
-						{row.value.slice(0, 6)} {!row.value ? '' : '... '}
-					</ul>{' '}
-				</span>
-			),
-			filterMethod: (filter, rows) =>
-				matchSorter(
-					rows,
-					filter.value,
-					{ keys: ['datahash'] },
-					{ threshold: matchSorter.rankings.SIMPLEMATCH }
-				),
-			filterAll: true
-		},
-		{
-			Header: 'Block Hash',
-			accessor: 'blockhash',
-			className: classes.hash,
-			Cell: row => (
-				<span>
-					<a
-						data-command="block-partial-hash"
-						className={classes.partialHash}
-						onClick={() => this.handleDialogOpenBlockHash(row.value)}
-						href="#/blocks"
-					>
-						<div className={classes.fullHash} id="showTransactionId">
-							{row.value}
-						</div>{' '}
-						{row.value.slice(0, 6)} {!row.value ? '' : '... '}
-					</a>{' '}
-				</span>
-			),
-			filterMethod: (filter, rows) =>
-				matchSorter(
-					rows,
-					filter.value,
-					{ keys: ['blockhash'] },
-					{ threshold: matchSorter.rankings.SIMPLEMATCH }
-				),
-			filterAll: true
-		},
-		{
-			Header: 'Previous Hash',
-			accessor: 'prehash',
-			className: classes.hash,
-			Cell: row => (
-				<span>
-					<ul
-						className={classes.partialHash}
-						onClick={() => this.handleDialogOpenBlockHash(row.value)}
-						href="#/blocks"
-					>
-						<div className={classes.fullHash} id="showTransactionId">
-							{row.value}
-						</div>{' '}
-						{row.value.slice(0, 6)} {!row.value ? '' : '... '}
-					</ul>{' '}
-				</span>
-			),
-			filterMethod: (filter, rows) =>
-				matchSorter(
-					rows,
-					filter.value,
-					{ keys: ['prehash'] },
-					{ threshold: matchSorter.rankings.SIMPLEMATCH }
-				),
-			filterAll: true,
-			width: 150
-		},
-		{
-			Header: 'Transactions',
-			accessor: 'txhash',
-			className: classes.hash,
-			Cell: row => (
-				<ul>
-					{!isNull(row.value)
-						? row.value.map(tid => (
-								<li
-									key={tid}
-									style={{
-										overflow: 'hidden',
-										whiteSpace: 'nowrap',
-										textOverflow: 'ellipsis'
-									}}
-								>
-									<a
-										className={classes.partialHash}
-										onClick={() => this.handleDialogOpen(tid)}
-										href="#/blocks"
+				filterMethod: (filter, rows) =>
+					matchSorter(
+						rows,
+						filter.value,
+						{ keys: ['prehash'] },
+						{ threshold: matchSorter.rankings.SIMPLEMATCH }
+					),
+				filterAll: true,
+				width: 150
+			},
+			{
+				Header: t('Transactions'),
+				accessor: 'txhash',
+				className: classes.hash,
+				Cell: row => (
+					<ul>
+						{!isNull(row.value)
+							? row.value.map(tid => (
+									<li
+										key={tid}
+										style={{
+											overflow: 'hidden',
+											whiteSpace: 'nowrap',
+											textOverflow: 'ellipsis'
+										}}
 									>
-										<div className={classes.lastFullHash} id="showTransactionId">
-											{tid}
-										</div>{' '}
-										{tid.slice(0, 6)} {!tid ? '' : '... '}
-									</a>
-								</li>
-						  ))
-						: 'null'}
-				</ul>
-			),
-			filterMethod: (filter, rows) =>
-				matchSorter(
-					rows,
-					filter.value,
-					{ keys: ['txhash'] },
-					{ threshold: matchSorter.rankings.SIMPLEMATCH }
+										<a
+											className={classes.partialHash}
+											onClick={() => this.handleDialogOpen(tid)}
+											href="#/blocks"
+										>
+											<div className={classes.lastFullHash} id="showTransactionId">
+												{tid}
+											</div>{' '}
+											{tid.slice(0, 6)} {!tid ? '' : '... '}
+										</a>
+									</li>
+							  ))
+							: 'null'}
+					</ul>
 				),
-			filterAll: true
-		},
-		{
-			Header: 'Size(KB)',
-			accessor: 'blksize',
-			filterMethod: (filter, rows) =>
-				matchSorter(
-					rows,
-					filter.value,
-					{ keys: ['blksize'] },
-					{ threshold: matchSorter.rankings.SIMPLEMATCH }
-				),
-			filterAll: true,
-			width: 150
-		}
-	];
+				filterMethod: (filter, rows) =>
+					matchSorter(
+						rows,
+						filter.value,
+						{ keys: ['txhash'] },
+						{ threshold: matchSorter.rankings.SIMPLEMATCH }
+					),
+				filterAll: true
+			},
+			{
+				Header: t('Size(KB)'),
+				accessor: 'blksize',
+				filterMethod: (filter, rows) =>
+					matchSorter(
+						rows,
+						filter.value,
+						{ keys: ['blksize'] },
+						{ threshold: matchSorter.rankings.SIMPLEMATCH }
+					),
+				filterAll: true,
+				width: 150
+			}
+		];
+	};
 
 	render() {
 		const blockList = this.state.search
 			? this.props.blockListSearch
 			: this.props.blockList;
-		const { transaction, classes } = this.props;
+		const { transaction, classes, t } = this.props;
 		const { blockHash, dialogOpen, dialogOpenBlockHash } = this.state;
 		return (
 			<div>
 				<div className={`${classes.filter} row searchRow`}>
 					<div className={`${classes.filterElement} col-md-3`}>
-						<label className="label">From</label>
+						<label className="label">{t('From')}</label>
 						<DatePicker
 							id="from"
 							selected={this.state.from}
@@ -432,7 +439,7 @@ export class Blocks extends Component {
 						/>
 					</div>
 					<div className={`${classes.filterElement} col-md-3`}>
-						<label className="label">To</label>
+						<label className="label">{t('To')}</label>
 						<DatePicker
 							id="to"
 							selected={this.state.to}
@@ -451,7 +458,7 @@ export class Blocks extends Component {
 								{this.state.err && (
 									<span className=" label border-red">
 										{' '}
-										From date should be less than To date
+										{t('From date should be less than To date')}
 									</span>
 								)}
 							</div>
@@ -464,7 +471,7 @@ export class Blocks extends Component {
 							shouldToggleOnHover={false}
 							selected={this.state.orgs}
 							options={this.state.options}
-							selectAllLabel="All Orgs"
+							selectAllLabel={t('All Orgs')}
 							onSelectedChanged={value => {
 								this.handleMultiSelect(value);
 							}}
@@ -479,7 +486,7 @@ export class Blocks extends Component {
 								await this.handleSearch();
 							}}
 						>
-							Search
+							{t('Search')}
 						</Button>
 					</div>
 					<div className="col-md-1">
@@ -490,7 +497,7 @@ export class Blocks extends Component {
 								this.handleClearSearch();
 							}}
 						>
-							Reset
+							{t('Reset')}
 						</Button>
 					</div>
 					<div className="col-md-1">
@@ -499,7 +506,7 @@ export class Blocks extends Component {
 							color="secondary"
 							onClick={() => this.setState({ filtered: [], sorted: [] })}
 						>
-							Clear Filter
+							{t('Clear Filter')}
 						</Button>
 					</div>
 				</div>
@@ -561,4 +568,4 @@ Blocks.defaultProps = {
 	transaction: null
 };
 
-export default withStyles(styles)(Blocks);
+export default compose(withTranslation(), withStyles(styles))(Blocks);

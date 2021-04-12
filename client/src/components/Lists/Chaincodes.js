@@ -5,6 +5,8 @@
 import React, { Component } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import matchSorter from 'match-sorter';
+import compose from 'recompose/compose';
+import { withTranslation } from 'react-i18next';
 import Dialog from '@material-ui/core/Dialog';
 import ReactTable from '../Styled/Table';
 import ChaincodeForm from '../Forms/ChaincodeForm';
@@ -48,68 +50,71 @@ export class Chaincodes extends Component {
 		this.setState({ sourceDialog: false });
 	};
 
-	reactTableSetup = classes => [
-		{
-			Header: 'Chaincode Name',
-			accessor: 'chaincodename',
-			filterMethod: (filter, rows) =>
-				matchSorter(
-					rows,
-					filter.value,
-					{ keys: ['chaincodename'] },
-					{ threshold: matchSorter.rankings.SIMPLEMATCH }
-				),
-			filterAll: true
-		},
-		{
-			Header: 'Channel Name',
-			accessor: 'channelName',
-			filterMethod: (filter, rows) =>
-				matchSorter(
-					rows,
-					filter.value,
-					{ keys: ['channelName'] },
-					{ threshold: matchSorter.rankings.SIMPLEMATCH }
-				),
-			filterAll: true
-		},
-		{
-			Header: 'Path',
-			accessor: 'path',
-			filterMethod: (filter, rows) =>
-				matchSorter(
-					rows,
-					filter.value,
-					{ keys: ['path'] },
-					{ threshold: matchSorter.rankings.SIMPLEMATCH }
-				),
-			filterAll: true
-		},
-		{
-			Header: 'Transaction Count',
-			accessor: 'txCount',
-			filterMethod: (filter, rows) =>
-				matchSorter(
-					rows,
-					filter.value,
-					{ keys: ['txCount'] },
-					{ threshold: matchSorter.rankings.SIMPLEMATCH }
-				),
-			filterAll: true
-		},
-		{
-			Header: 'Version',
-			accessor: 'version',
-			filterMethod: (filter, rows) =>
-				matchSorter(
-					rows,
-					filter.value,
-					{ keys: ['version'] },
-					{ threshold: matchSorter.rankings.SIMPLEMATCH }
-				),
-			filterAll: true
-		}
-	];
+	reactTableSetup = classes => {
+		const { t } = this.props;
+		return [
+			{
+				Header: t('Chaincode Name'),
+				accessor: 'chaincodename',
+				filterMethod: (filter, rows) =>
+					matchSorter(
+						rows,
+						filter.value,
+						{ keys: ['chaincodename'] },
+						{ threshold: matchSorter.rankings.SIMPLEMATCH }
+					),
+				filterAll: true
+			},
+			{
+				Header: t('Channel Name'),
+				accessor: 'channelName',
+				filterMethod: (filter, rows) =>
+					matchSorter(
+						rows,
+						filter.value,
+						{ keys: ['channelName'] },
+						{ threshold: matchSorter.rankings.SIMPLEMATCH }
+					),
+				filterAll: true
+			},
+			{
+				Header: t('Path'),
+				accessor: 'path',
+				filterMethod: (filter, rows) =>
+					matchSorter(
+						rows,
+						filter.value,
+						{ keys: ['path'] },
+						{ threshold: matchSorter.rankings.SIMPLEMATCH }
+					),
+				filterAll: true
+			},
+			{
+				Header: t('Transaction Count'),
+				accessor: 'txCount',
+				filterMethod: (filter, rows) =>
+					matchSorter(
+						rows,
+						filter.value,
+						{ keys: ['txCount'] },
+						{ threshold: matchSorter.rankings.SIMPLEMATCH }
+					),
+				filterAll: true
+			},
+			{
+				Header: t('Version'),
+				accessor: 'version',
+				filterMethod: (filter, rows) =>
+					matchSorter(
+						rows,
+						filter.value,
+						{ keys: ['version'] },
+						{ threshold: matchSorter.rankings.SIMPLEMATCH }
+					),
+				filterAll: true
+			}
+		];
+	};
 
 	render() {
 		const { chaincodeList, classes } = this.props;
@@ -156,4 +161,4 @@ Chaincodes.propTypes = {
 	chaincodeList: chaincodeListType.isRequired
 };
 
-export default withStyles(styles)(Chaincodes);
+export default compose(withTranslation(), withStyles(styles))(Chaincodes);

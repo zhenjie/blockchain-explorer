@@ -6,6 +6,7 @@
 import React, { Component } from 'react';
 import compose from 'recompose/compose';
 import { connect } from 'react-redux';
+import { withTranslation } from 'react-i18next';
 import classNames from 'classnames';
 import { withStyles } from '@material-ui/core/styles';
 import { Nav, Navbar, NavbarBrand, NavbarToggler, Collapse } from 'reactstrap';
@@ -226,7 +227,7 @@ export class HeaderView extends Component {
 	}
 
 	componentDidMount() {
-		const { channels: channelArr , currentChannel } = this.props;
+		const { channels: channelArr, currentChannel } = this.props;
 		const arr = [];
 		let selectedValue = {};
 		channelArr.forEach(element => {
@@ -459,7 +460,7 @@ export class HeaderView extends Component {
 	}
 
 	render() {
-		const { mode, classes } = this.props;
+		const { mode, classes, t } = this.props;
 		const { hostname, port } = window.location;
 		const webSocketProtocol =
 			window.location.protocol === 'https:' ? 'wss' : 'ws';
@@ -477,12 +478,12 @@ export class HeaderView extends Component {
 			notifications
 		} = this.state;
 		const links = [
-			{ to: '/', label: 'DASHBOARD', exact: true },
-			{ to: '/network', label: 'NETWORK' },
-			{ to: '/blocks', label: 'BLOCKS' },
-			{ to: '/transactions', label: 'TRANSACTIONS' },
-			{ to: '/chaincodes', label: 'CHAINCODES' },
-			{ to: '/channels', label: 'CHANNELS' }
+			{ to: '/', label: t('DASHBOARD'), exact: true },
+			{ to: '/network', label: t('NETWORK') },
+			{ to: '/blocks', label: t('BLOCKS') },
+			{ to: '/transactions', label: t('TRANSACTIONS') },
+			{ to: '/chaincodes', label: t('CHAINCODES') },
+			{ to: '/channels', label: t('CHANNELS') }
 		];
 
 		return (
@@ -653,6 +654,7 @@ HeaderView.propTypes = {
 const { modeSelector } = themeSelectors;
 
 export default compose(
+	withTranslation(),
 	withStyles(styles),
 	connect(
 		state => ({

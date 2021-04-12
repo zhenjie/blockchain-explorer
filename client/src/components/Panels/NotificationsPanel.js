@@ -4,6 +4,8 @@
 /* eslint-disable */
 import React, { Component } from 'react';
 import { withStyles } from '@material-ui/core/styles';
+import compose from 'recompose/compose';
+import { withTranslation } from 'react-i18next';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -62,7 +64,7 @@ export class NotificationsPanel extends Component {
 
 	/* istanbul ignore next */
 	render() {
-		const { classes, notifications } = this.props;
+		const { classes, notifications, t } = this.props;
 		if (notifications.length === 0) {
 			return (
 				<div className={classes.panel}>
@@ -70,7 +72,7 @@ export class NotificationsPanel extends Component {
 						<List component="nav" className={classes.panel}>
 							<ListItem button>
 								<Typography variant="title" className={classes.panel}>
-									NO NOTIFICATIONS
+									{t('NO NOTIFICATIONS')}
 								</Typography>
 							</ListItem>
 						</List>
@@ -111,4 +113,7 @@ export class NotificationsPanel extends Component {
 	}
 }
 
-export default withStyles(styles)(NotificationsPanel);
+export default compose(
+	withTranslation(),
+	withStyles(styles)
+)(NotificationsPanel);

@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 
 import classnames from 'classnames';
+import { withTranslation } from 'react-i18next';
 import { TabContent, TabPane, Nav, NavItem, NavLink } from 'reactstrap';
 import Register from '../Register/Register';
 import Users from '../Lists/Users';
-import Container from '../Container'
+import Container from '../Container';
 
 export class UsersPanal extends Component {
 	constructor(props) {
@@ -39,7 +40,7 @@ export class UsersPanal extends Component {
 	};
 	render() {
 		const { activeTab } = this.state;
-		const { onClose } = this.props;
+		const { onClose, t } = this.props;
 		return (
 			<Container>
 				<Nav tabs>
@@ -52,7 +53,7 @@ export class UsersPanal extends Component {
 								this.toggle('1');
 							}}
 						>
-							USERS
+							{t('USERS')}
 						</NavLink>
 					</NavItem>
 					<NavItem>
@@ -64,7 +65,7 @@ export class UsersPanal extends Component {
 								this.toggle('2');
 							}}
 						>
-							ADD USER
+							{t('ADD USER')}
 						</NavLink>
 					</NavItem>
 				</Nav>
@@ -81,4 +82,4 @@ export class UsersPanal extends Component {
 	}
 }
 
-export default UsersPanal;
+export default withTranslation()(UsersPanal);

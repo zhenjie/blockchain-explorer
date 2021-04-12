@@ -4,6 +4,8 @@
 
 import React, { Component } from 'react';
 import { withStyles } from '@material-ui/core/styles';
+import compose from 'recompose/compose';
+import { withTranslation } from 'react-i18next';
 import FontAwesome from 'react-fontawesome';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { Table, Card, CardBody, CardTitle } from 'reactstrap';
@@ -75,7 +77,7 @@ export class TransactionView extends Component {
 	};
 
 	render() {
-		const { transaction, classes } = this.props;
+		const { transaction, classes, t } = this.props;
 		if (transaction && !transaction.read_set) {
 			return (
 				<Modal>
@@ -83,7 +85,7 @@ export class TransactionView extends Component {
 						<div>
 							<CardTitle className={modalClasses.title}>
 								<FontAwesome name="list-alt" className={classes.listIcon} />
-								Transaction Details
+								{t('Transaction Details')}
 								<button
 									type="button"
 									onClick={this.handleClose}
@@ -113,7 +115,7 @@ export class TransactionView extends Component {
 							<Card className={modalClasses.card}>
 								<CardTitle className={modalClasses.title}>
 									<FontAwesome name="list-alt" className={classes.listIcon} />
-									Transaction Details
+									{t('Transaction Details')}
 									<button
 										type="button"
 										onClick={this.handleClose}
@@ -126,7 +128,7 @@ export class TransactionView extends Component {
 									<Table striped hover responsive className="table-striped">
 										<tbody>
 											<tr>
-												<th>Transaction ID:</th>
+												<th>{t('Transaction ID')}:</th>
 												<td>
 													{transaction.txhash}
 													<button type="button" className={modalClasses.copyBtn}>
@@ -139,35 +141,35 @@ export class TransactionView extends Component {
 												</td>
 											</tr>
 											<tr>
-												<th>Validation Code:</th>
+												<th>{t('Validation Code')}:</th>
 												<td>{transaction.validation_code}</td>
 											</tr>
 											<tr>
-												<th>Payload Proposal Hash:</th>
+												<th>{t('Payload Proposal Hash')}:</th>
 												<td>{transaction.payload_proposal_hash}</td>
 											</tr>
 											<tr>
-												<th>Creator MSP:</th>
+												<th>{t('Creator MSP')}:</th>
 												<td>{transaction.creator_msp_id}</td>
 											</tr>
 											<tr>
-												<th>Endorser:</th>
+												<th>{t('Endorser')}:</th>
 												<td>{transaction.endorser_msp_id}</td>
 											</tr>
 											<tr>
-												<th>Chaincode Name:</th>
+												<th>{t('Chaincode Name')}:</th>
 												<td>{transaction.chaincodename}</td>
 											</tr>
 											<tr>
-												<th>Type:</th>
+												<th>{t('Type')}:</th>
 												<td>{transaction.type}</td>
 											</tr>
 											<tr>
-												<th>Time:</th>
+												<th>{t('Time')}:</th>
 												<td>{transaction.createdt}</td>
 											</tr>
 											<tr>
-												<th style={reads}>Reads:</th>
+												<th style={reads}>{t('Reads')}:</th>
 												<td className={classes.JSONtree}>
 													<JSONTree
 														data={transaction.read_set}
@@ -177,7 +179,7 @@ export class TransactionView extends Component {
 												</td>
 											</tr>
 											<tr>
-												<th style={writes}>Writes:</th>
+												<th style={writes}>{t('Writes')}:</th>
 												<td className={classes.JSONtree}>
 													<JSONTree
 														data={transaction.write_set}
@@ -201,7 +203,7 @@ export class TransactionView extends Component {
 					<div>
 						<CardTitle className={modalClasses.title}>
 							<FontAwesome name="list-alt" className={classes.listIcon} />
-							Transaction Details
+							{t('Transaction Details')}
 							<button
 								type="button"
 								onClick={this.handleClose}
@@ -233,4 +235,4 @@ TransactionView.defaultProps = {
 	transaction: null
 };
 
-export default withStyles(styles)(TransactionView);
+export default compose(withTranslation(), withStyles(styles))(TransactionView);

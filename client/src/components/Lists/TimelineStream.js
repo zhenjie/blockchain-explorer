@@ -5,6 +5,8 @@
 import React, { Component } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import { Timeline, TimelineEvent } from 'react-event-timeline';
+import compose from 'recompose/compose';
+import { withTranslation } from 'react-i18next';
 import Dialog from '@material-ui/core/Dialog';
 import FontAwesome from 'react-fontawesome';
 import Typography from '@material-ui/core/Typography';
@@ -72,7 +74,7 @@ export class TimelineStream extends Component {
 	};
 
 	render() {
-		const { notifications, classes } = this.props;
+		const { notifications, classes, t } = this.props;
 		const { blockHash, dialogOpenBlockHash } = this.state;
 		return (
 			<div>
@@ -106,10 +108,11 @@ export class TimelineStream extends Component {
 								}
 							>
 								<Typography variant="body1">
-									<b className={classes.text}> Channel Name:</b> {item.channelName}{' '}
+									<b className={classes.text}> {t('Channel Name')}:</b>{' '}
+									{item.channelName} <br />
+									<b className={classes.text}> {t('Datahash')}:</b> {item.datahash}{' '}
 									<br />
-									<b className={classes.text}> Datahash:</b> {item.datahash} <br />
-									<b className={classes.text}> Number of Tx:</b> {item.txcount}
+									<b className={classes.text}> {t('Number of Tx')}:</b> {item.txcount}
 								</Typography>
 								<h5 className={classes.text}>
 									<Badge className={classes.text}>
@@ -147,4 +150,4 @@ TimelineStream.propTypes = {
 	notifications: notificationsType.isRequired
 };
 
-export default withStyles(styles)(TimelineStream);
+export default compose(withTranslation(), withStyles(styles))(TimelineStream);

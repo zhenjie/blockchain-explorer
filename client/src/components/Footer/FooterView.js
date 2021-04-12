@@ -3,6 +3,7 @@
  */
 
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { withStyles } from '@material-ui/core/styles';
 import clientJson from '../../../package.json';
 import FabricVersion from '../../FabricVersion';
@@ -26,17 +27,22 @@ const styles = theme => {
 	};
 };
 
-const FooterView = ({ classes }) => (
-	<div className={classes.root}>
-		<div>
-			<div className={classes.footer}>
-				{'Hyperledger Explorer Client Version: '}
-				{clientJson.version}
-				&emsp;
-				{'Fabric Compatibility: '} {FabricVersion.map(v => v)}
+const FooterView = ({ classes }) => {
+	const { t } = useTranslation();
+	return (
+		<div className={classes.root}>
+			<div>
+				<div className={classes.footer}>
+					{t('Hyperledger Explorer Client Version')}
+					{': '}
+					{clientJson.version}
+					&emsp;
+					{t('Fabric Compatibility')}
+					{': '} {FabricVersion.join(', ')}
+				</div>
 			</div>
 		</div>
-	</div>
-);
+	);
+};
 
 export default withStyles(styles)(FooterView);

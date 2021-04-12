@@ -4,14 +4,16 @@
 
 import React from 'react';
 import matchSorter from 'match-sorter';
+import { useTranslation } from 'react-i18next';
 import ReactTable from '../Styled/Table';
 import { peerListType } from '../types';
 
 /* istanbul ignore next */
 const Peers = ({ peerList }) => {
+	const { t } = useTranslation();
 	const columnHeaders = [
 		{
-			Header: 'Peer Name',
+			Header: t('Peer Name'),
 			accessor: 'server_hostname',
 			filterMethod: (filter, rows) =>
 				matchSorter(
@@ -23,7 +25,7 @@ const Peers = ({ peerList }) => {
 			filterAll: true
 		},
 		{
-			Header: 'Request Url',
+			Header: t('Request Url'),
 			accessor: 'requests',
 			filterMethod: (filter, rows) =>
 				matchSorter(
@@ -35,7 +37,7 @@ const Peers = ({ peerList }) => {
 			filterAll: true
 		},
 		{
-			Header: 'Peer Type',
+			Header: t('Peer Type'),
 			accessor: 'peer_type',
 			filterMethod: (filter, rows) =>
 				matchSorter(
@@ -47,7 +49,7 @@ const Peers = ({ peerList }) => {
 			filterAll: true
 		},
 		{
-			Header: 'MSPID',
+			Header: t('MSPID'),
 			accessor: 'mspid',
 			filterMethod: (filter, rows) =>
 				matchSorter(
@@ -59,10 +61,10 @@ const Peers = ({ peerList }) => {
 			filterAll: true
 		},
 		{
-			Header: 'Ledger Height',
+			Header: t('Ledger Height'),
 			columns: [
 				{
-					Header: 'High',
+					Header: t('High'),
 					accessor: 'ledger_height_high',
 					filterMethod: (filter, rows) =>
 						matchSorter(
@@ -74,7 +76,7 @@ const Peers = ({ peerList }) => {
 					filterAll: true
 				},
 				{
-					Header: 'Low',
+					Header: t('Low'),
 					accessor: 'ledger_height_low',
 					filterMethod: (filter, rows) =>
 						matchSorter(
@@ -86,7 +88,7 @@ const Peers = ({ peerList }) => {
 					filterAll: true
 				},
 				{
-					Header: 'Unsigned',
+					Header: t('Unsigned'),
 					id: 'ledger_height_unsigned',
 					accessor: d => d.ledger_height_unsigned.toString(),
 					filterMethod: (filter, rows) =>

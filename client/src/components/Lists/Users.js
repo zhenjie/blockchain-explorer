@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 
 import compose from 'recompose/compose';
+import { withTranslation } from 'react-i18next';
 import { connect } from 'react-redux';
 
 import { withStyles } from '@material-ui/core/styles';
@@ -27,7 +28,7 @@ import Avatar from '@material-ui/core/Avatar';
 import { shape, string } from 'prop-types';
 import { authSelectors, authOperations } from '../../state/redux/auth';
 import { userListType, getUserListType } from '../types';
-import Container from '../Container'
+import Container from '../Container';
 
 const styles = theme => {
 	const { type } = theme.palette;
@@ -136,7 +137,7 @@ export class Users extends Component {
 		);
 	}
 	render() {
-		const { classes, onClose } = this.props;
+		const { classes, onClose, t } = this.props;
 		/* const [open, setOpen] = React.useState(false);
 		 */
 		const { info } = this.state;
@@ -195,7 +196,10 @@ export class Users extends Component {
 										secondary={user.username}
 									/>
 								) : (
-									<ListItemText primary="No Name Listed" secondary={user.username} />
+									<ListItemText
+										primary={t('No Name Listed')}
+										secondary={user.username}
+									/>
 								)}
 								<IconButton
 									className={classes.deleteButton}
@@ -249,6 +253,7 @@ Users.propTypes = {
 	userlist: getUserListType.isRequired
 };
 export default compose(
+	withTranslation(),
 	withStyles(styles),
 	connect(
 		state => ({

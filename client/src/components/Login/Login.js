@@ -206,7 +206,7 @@ export class Login extends Component {
 						<LockOutlinedIcon />
 					</Avatar>
 					<Typography component="h5" variant="headline">
-						{t('login.Sign In')}
+						{t('Sign In')}
 					</Typography>
 					<form className={classes.form} onSubmit={this.submitForm}>
 						<FormControl margin="normal" required fullWidth>
@@ -216,7 +216,7 @@ export class Login extends Component {
 								select
 								id="network"
 								name="network"
-								label={t('login.Network')}
+								label={t('Network')}
 								disabled={isLoading}
 								value={network.value}
 								onChange={e => this.handleChange(e)}
@@ -250,7 +250,7 @@ export class Login extends Component {
 									fullWidth
 									id="user"
 									name="user"
-									label={t('login.User')}
+									label={t('User')}
 									disabled={isLoading}
 									value={user.value}
 									onChange={e => this.handleChange(e)}
@@ -280,7 +280,7 @@ export class Login extends Component {
 									id="password"
 									type="password"
 									name="password"
-									label={t('login.Password')}
+									label={t('Password')}
 									disabled={isLoading}
 									value={password.value}
 									onChange={e => this.handleChange(e)}
@@ -318,7 +318,7 @@ export class Login extends Component {
 							color="primary"
 							className={classes.submit}
 						>
-							{authEnabled ? t('login.Sign In') : t('login.Connect')}
+							{authEnabled ? t('Sign In') : t('Connect')}
 						</Button>
 					</form>
 				</Paper>

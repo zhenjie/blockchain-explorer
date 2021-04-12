@@ -5,6 +5,7 @@
 import React, { Component } from 'react';
 
 import compose from 'recompose/compose';
+import { withTranslation } from 'react-i18next';
 import { connect } from 'react-redux';
 
 import { withStyles } from '@material-ui/core/styles';
@@ -21,7 +22,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import IconButton from '@material-ui/core/IconButton';
 import Grid from '@material-ui/core/Grid';
 import { shape, string } from 'prop-types';
-import Container from '../Container'
+import Container from '../Container';
 
 import { authSelectors, authOperations } from '../../state/redux/auth';
 
@@ -122,6 +123,7 @@ export class Register extends Component {
 	}
 
 	handleChange = event => {
+		const { t } = this.props;
 		const { target } = event;
 		const value = target.type === 'checkbox' ? target.checked : target.value;
 		const { name } = target;
@@ -137,7 +139,7 @@ export class Register extends Component {
 			) {
 				password2 = {
 					value: this.state.password2.value,
-					error: 'The password confirmation does not match.'
+					error: t('The password confirmation does not match.')
 				};
 			} else {
 				password2 = { value: this.state.password2.value, error: null };
@@ -147,7 +149,10 @@ export class Register extends Component {
 				this.state.password.value.length &&
 				value !== this.state.password.value
 			) {
-				password2 = { value, error: 'The password confirmation does not match.' };
+				password2 = {
+					value,
+					error: t('The password confirmation does not match.')
+				};
 			} else {
 				password2 = { value, error: null };
 			}
@@ -255,12 +260,12 @@ export class Register extends Component {
 			isLoading,
 			lastSaved
 		} = this.state;
-		const { classes, error, onClose } = this.props;
+		const { classes, error, onClose, t } = this.props;
 		return (
 			<Container>
 				<Paper className={classes.paper}>
 					<Typography className={classes.title} component="h5" variant="headline">
-						Register User
+						{t('Register User')}
 					</Typography>
 					<MuiDialogTitle>
 						{onClose ? (
@@ -280,7 +285,7 @@ export class Register extends Component {
 								fullWidth
 								id="user"
 								name="user"
-								label="User"
+								label={t('User')}
 								disabled={isLoading}
 								value={user.value}
 								onChange={e => this.handleChange(e)}
@@ -297,7 +302,7 @@ export class Register extends Component {
 								fullWidth
 								id="firstname"
 								name="firstname"
-								label="First name"
+								label={t('First name')}
 								disabled={isLoading}
 								value={firstname.value}
 								onChange={e => this.handleChange(e)}
@@ -314,7 +319,7 @@ export class Register extends Component {
 								fullWidth
 								id="lastname"
 								name="lastname"
-								label="Last name"
+								label={t('Last name')}
 								disabled={isLoading}
 								value={lastname.value}
 								onChange={e => this.handleChange(e)}
@@ -331,7 +336,7 @@ export class Register extends Component {
 								fullWidth
 								id="email"
 								name="email"
-								label="E-mail address"
+								label={t('E-mail address')}
 								disabled={isLoading}
 								value={email.value}
 								onChange={e => this.handleChange(e)}
@@ -351,7 +356,7 @@ export class Register extends Component {
 								id="password"
 								type="password"
 								name="password"
-								label="Password"
+								label={t('Password')}
 								disabled={isLoading}
 								value={password.value}
 								onChange={e => this.handleChange(e)}
@@ -371,7 +376,7 @@ export class Register extends Component {
 								id="password2"
 								type="password"
 								name="password2"
-								label="Password(confirm)"
+								label={t('Password(confirm)')}
 								disabled={isLoading}
 								value={password2.value}
 								onChange={e => this.handleChange(e)}
@@ -392,7 +397,7 @@ export class Register extends Component {
 								id="roles"
 								type="roles"
 								name="roles"
-								label="Roles"
+								label={t('Roles')}
 								disabled={isLoading}
 								value={roles.value}
 								onChange={e => this.handleChange(e)}
@@ -434,7 +439,7 @@ export class Register extends Component {
 						>
 							<Grid item>
 								<Button fullWidth variant="contained" color="primary" onClick={onClose}>
-									Cancel
+									{t('Cancel')}
 								</Button>
 							</Grid>
 							<Grid item>
@@ -445,7 +450,7 @@ export class Register extends Component {
 									variant="contained"
 									color="primary"
 								>
-									Register
+									{t('Register')}
 								</Button>
 							</Grid>
 						</Grid>
@@ -459,6 +464,7 @@ export class Register extends Component {
 const { errorSelector, registeredSelector } = authSelectors;
 
 export default compose(
+	withTranslation(),
 	withStyles(styles),
 	connect(
 		state => ({

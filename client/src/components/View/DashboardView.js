@@ -5,6 +5,8 @@
 import React, { Component } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import { Row, Col } from 'reactstrap';
+import compose from 'recompose/compose';
+import { withTranslation } from 'react-i18next';
 import FontAwesome from 'react-fontawesome';
 import Card from '@material-ui/core/Card';
 import Avatar from '@material-ui/core/Avatar';
@@ -135,12 +137,13 @@ export class DashboardView extends Component {
 	}
 
 	setNotifications = blockList => {
+		const { t } = this.props;
 		const notificationsArr = [];
 		if (blockList !== undefined) {
 			for (let i = 0; i < 3 && blockList && blockList[i]; i += 1) {
 				const block = blockList[i];
 				const notify = {
-					title: `Block ${block.blocknum} `,
+					title: `${t('Block')} ${block.blocknum} `,
 					type: 'block',
 					time: block.createdt,
 					txcount: block.txcount,
@@ -174,7 +177,7 @@ export class DashboardView extends Component {
 				</div>
 			);
 		}
-		const { classes } = this.props;
+		const { classes, t } = this.props;
 		return (
 			<div className={classes.background}>
 				<div className={classes.view}>
@@ -192,7 +195,7 @@ export class DashboardView extends Component {
 											<h1 className={classes.count}>{dashStats.latestBlock}</h1>
 										</Col>
 									</Row>
-									BLOCKS
+									{t('BLOCKS')}
 								</div>
 								<div className={`${classes.statistic} ${classes.vdivide}`}>
 									<Row>
@@ -205,7 +208,7 @@ export class DashboardView extends Component {
 											<h1 className={classes.count}>{dashStats.txCount}</h1>
 										</Col>
 									</Row>
-									TRANSACTIONS
+									{t('TRANSACTIONS')}
 								</div>
 								<div className={`${classes.statistic} ${classes.vdivide}`}>
 									<Row>
@@ -218,7 +221,7 @@ export class DashboardView extends Component {
 											<h1 className={classes.count}>{dashStats.peerCount}</h1>
 										</Col>
 									</Row>
-									NODES
+									{t('NODES')}
 								</div>
 								<div className={classes.statistic}>
 									<Row>
@@ -231,7 +234,8 @@ export class DashboardView extends Component {
 											<h1 className={classes.count}>{dashStats.chaincodeCount}</h1>
 										</Col>
 									</Row>
-									CHAINCODES
+
+									{t('CHAINCODES')}
 								</div>
 							</Card>
 						</Col>
@@ -253,7 +257,7 @@ export class DashboardView extends Component {
 								<ChartStats />
 							</Card>
 							<Card className={`${classes.section} ${classes.center}`}>
-								<h5>Transactions by Organization</h5>
+								<h5>{t('Transactions by Organization')}</h5>
 								<hr />
 								<OrgPieChart transactionByOrg={transactionByOrg} />
 							</Card>
@@ -272,4 +276,4 @@ DashboardView.propTypes = {
 	transactionByOrg: transactionByOrgType.isRequired
 };
 
-export default withStyles(styles)(DashboardView);
+export default compose(withTranslation(), withStyles(styles))(DashboardView);

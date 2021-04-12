@@ -5,6 +5,7 @@
 import React, { Component } from 'react';
 import Slider from 'react-slick';
 import compose from 'recompose/compose';
+import { withTranslation } from 'react-i18next';
 import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core/styles';
 import Logo from '../../static/images/Explorer_Logo.svg';
@@ -172,20 +173,20 @@ export class LandingPage extends Component {
 				</div>
 			);
 		}
-		const { classes } = this.props;
+		const { classes, t } = this.props;
 		return (
 			<div className={classes.background}>
 				<div className={classes.content}>
 					<img src={Logo} style={logoStyle} alt="Hyperledger Logo" />
 					<Slider {...settings}>
 						<div>
-							<h3>ACCESSING THE NETWORK</h3>
+							<h3>{t('ACCESSING THE NETWORK')}</h3>
 						</div>
 						<div>
-							<h3>CONNECTING TO CHANNEL</h3>
+							<h3>{t('CONNECTING TO CHANNEL')}</h3>
 						</div>
 						<div>
-							<h3>LOADING BLOCKS</h3>
+							<h3>{t('LOADING BLOCKS')}</h3>
 						</div>
 					</Slider>
 				</div>
@@ -218,6 +219,7 @@ LandingPage.defaultProps = {
 };
 
 export default compose(
+	withTranslation(),
 	withStyles(styles),
 	connect(
 		state => ({

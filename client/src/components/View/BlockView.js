@@ -5,6 +5,8 @@
 import React, { Component } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import FontAwesome from 'react-fontawesome';
+import compose from 'recompose/compose';
+import { withTranslation } from 'react-i18next';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { Table, Card, CardBody, CardTitle } from 'reactstrap';
 import { blockHashType, onCloseType } from '../types';
@@ -24,7 +26,7 @@ export class BlockView extends Component {
 	};
 
 	render() {
-		const { blockHash, classes } = this.props;
+		const { blockHash, classes, t } = this.props;
 		if (!blockHash) {
 			return (
 				<Modal>
@@ -32,7 +34,7 @@ export class BlockView extends Component {
 						<Card className={modalClasses.card}>
 							<CardTitle className={modalClasses.title}>
 								<FontAwesome name="cube" />
-								Block Details
+								{t('Block Details')}
 							</CardTitle>
 							<CardBody className={modalClasses.body}>
 								<span>
@@ -52,7 +54,7 @@ export class BlockView extends Component {
 						<Card className={modalClasses.card}>
 							<CardTitle className={modalClasses.title}>
 								<FontAwesome name="cube" className={classes.cubeIcon} />
-								Block Details
+								{t('Block Details')}
 								<button
 									type="button"
 									onClick={this.handleClose}
@@ -65,24 +67,24 @@ export class BlockView extends Component {
 								<Table striped hover responsive className="table-striped">
 									<tbody>
 										<tr>
-											<th>Channel name:</th>
+											<th>{t('Channel name')}:</th>
 											<td>{blockHash.channelname}</td>
 										</tr>
 										<tr>
-											<th>Block Number</th>
+											<th>{t('Block Number')}</th>
 											<td>{blockHash.blocknum}</td>
 										</tr>
 										<tr>
-											<th>Created at</th>
+											<th>{t('Created at')}</th>
 											<td>{blockHash.createdt}</td>
 										</tr>
 
 										<tr>
-											<th>Number of Transactions</th>
+											<th>{t('Number of Transactions')}</th>
 											<td>{blockHash.txcount}</td>
 										</tr>
 										<tr>
-											<th>Block Hash</th>
+											<th>{t('Block Hash')}</th>
 											<td>
 												{blockHash.blockhash}
 												<button type="button" className={modalClasses.copyBtn}>
@@ -95,7 +97,7 @@ export class BlockView extends Component {
 											</td>
 										</tr>
 										<tr>
-											<th>Data Hash</th>
+											<th>{t('Data Hash')}</th>
 											<td>
 												{blockHash.datahash}
 												<button type="button" className={modalClasses.copyBtn}>
@@ -108,7 +110,7 @@ export class BlockView extends Component {
 											</td>
 										</tr>
 										<tr>
-											<th>Prehash</th>
+											<th>{t('Prehash')}</th>
 											<td>
 												{blockHash.prehash}
 												<button type="button" className={modalClasses.copyBtn}>
@@ -136,4 +138,4 @@ BlockView.propTypes = {
 	onClose: onCloseType.isRequired
 };
 
-export default withStyles(styles)(BlockView);
+export default compose(withTranslation(), withStyles(styles))(BlockView);

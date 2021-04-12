@@ -4,6 +4,8 @@
 
 import React, { Component } from 'react';
 import { withStyles } from '@material-ui/core/styles';
+import compose from 'recompose/compose';
+import { withTranslation } from 'react-i18next';
 import Dialog from '@material-ui/core/Dialog';
 import { Button } from 'reactstrap';
 import matchSorter from 'match-sorter';
@@ -133,16 +135,17 @@ export class Transactions extends Component {
 		clearInterval(this.interVal);
 	}
 
-	handleCustomRender(selected, options) {
+	handleCustomRender = (selected, options) => {
+		const { t } = this.props;
 		if (selected.length === 0) {
-			return 'Select Orgs';
+			return t('Select Orgs');
 		}
 		if (selected.length === options.length) {
-			return 'All Orgs Selected';
+			return t('All Orgs Selected');
 		}
 
 		return selected.join(',');
-	}
+	};
 
 	searchTransactionList = async channel => {
 		let query = `from=${new Date(this.state.from).toString()}&&to=${new Date(
@@ -200,10 +203,10 @@ export class Transactions extends Component {
 	};
 
 	render() {
-		const { classes } = this.props;
+		const { classes, t } = this.props;
 		const columnHeaders = [
 			{
-				Header: 'Creator',
+				Header: t('Creator'),
 				accessor: 'creator_msp_id',
 				filterMethod: (filter, rows) =>
 					matchSorter(
@@ -215,7 +218,7 @@ export class Transactions extends Component {
 				filterAll: true
 			},
 			{
-				Header: 'Channel Name',
+				Header: t('Channel Name'),
 				accessor: 'channelname',
 				filterMethod: (filter, rows) =>
 					matchSorter(
@@ -227,7 +230,7 @@ export class Transactions extends Component {
 				filterAll: true
 			},
 			{
-				Header: 'Tx Id',
+				Header: t('Tx Id'),
 				accessor: 'txhash',
 				className: classes.hash,
 				Cell: row => (
@@ -256,7 +259,7 @@ export class Transactions extends Component {
 				filterAll: true
 			},
 			{
-				Header: 'Type',
+				Header: t('Type'),
 				accessor: 'type',
 				filterMethod: (filter, rows) =>
 					matchSorter(
@@ -268,7 +271,7 @@ export class Transactions extends Component {
 				filterAll: true
 			},
 			{
-				Header: 'Chaincode',
+				Header: t('Chaincode'),
 				accessor: 'chaincodename',
 				filterMethod: (filter, rows) =>
 					matchSorter(
@@ -280,7 +283,7 @@ export class Transactions extends Component {
 				filterAll: true
 			},
 			{
-				Header: 'Timestamp',
+				Header: t('Timestamp'),
 				accessor: 'createdt',
 				filterMethod: (filter, rows) =>
 					matchSorter(
@@ -302,7 +305,7 @@ export class Transactions extends Component {
 			<div>
 				<div className={`${classes.filter} row searchRow`}>
 					<div className={`${classes.filterElement} col-md-3`}>
-						<label className="label">From</label>
+						<label className="label">{t('From')}</label>
 						<DatePicker
 							id="from"
 							selected={this.state.from}
@@ -319,7 +322,7 @@ export class Transactions extends Component {
 						/>
 					</div>
 					<div className={`${classes.filterElement} col-md-3`}>
-						<label className="label">To</label>
+						<label className="label">{t('To')}</label>
 						<DatePicker
 							id="to"
 							selected={this.state.to}
@@ -338,7 +341,7 @@ export class Transactions extends Component {
 								{this.state.err && (
 									<span className=" label border-red">
 										{' '}
-										From date should be less than To date
+										{t('From date should be less than To date')}
 									</span>
 								)}
 							</div>
@@ -351,7 +354,7 @@ export class Transactions extends Component {
 							shouldToggleOnHover={false}
 							selected={this.state.orgs}
 							options={this.state.options}
-							selectAllLabel="All Orgs"
+							selectAllLabel={t('All Orgs')}
 							onSelectedChanged={value => {
 								this.handleMultiSelect(value);
 							}}
@@ -366,7 +369,7 @@ export class Transactions extends Component {
 								await this.handleSearch();
 							}}
 						>
-							Search
+							{t('Search')}
 						</Button>
 					</div>
 					<div className="col-md-1">
@@ -377,7 +380,7 @@ export class Transactions extends Component {
 								this.handleClearSearch();
 							}}
 						>
-							Reset
+							{t('Reset')}
 						</Button>
 					</div>
 					<div className="col-md-1">
@@ -386,7 +389,7 @@ export class Transactions extends Component {
 							color="secondary"
 							onClick={() => this.setState({ filtered: [], sorted: [] })}
 						>
-							Clear Filter
+							{t('Clear Filter')}
 						</Button>
 					</div>
 				</div>
@@ -436,4 +439,4 @@ Transactions.defaultProps = {
 	transaction: null
 };
 
-export default withStyles(styles)(Transactions);
+export default compose(withTranslation(), withStyles(styles))(Transactions);

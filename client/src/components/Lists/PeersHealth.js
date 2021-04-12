@@ -4,6 +4,7 @@
 
 import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
+import { useTranslation } from 'react-i18next';
 import ReactTable from '../Styled/Table';
 import { peerStatusType } from '../types';
 
@@ -22,9 +23,10 @@ const styles = theme => ({
 /* eslint-enable */
 
 const PeersHealth = ({ peerStatus, classes }) => {
+	const { t } = useTranslation();
 	const columnHeaders = [
 		{
-			Header: 'Peer Name',
+			Header: t('Peer Name'),
 			accessor: 'server_hostname',
 			filterAll: false,
 			className: classes.center
