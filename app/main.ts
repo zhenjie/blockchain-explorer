@@ -28,6 +28,8 @@ const sslEnabled = process.env.SSL_ENABLED || appconfig.sslEnabled;
 const sslCertsPath = process.env.SSL_CERTS_PATH || appconfig.sslCertsPath;
 const host = process.env.HOST || appconfig.host;
 const port = process.env.PORT || appconfig.port;
+const contentSecurityPolicyDefaultSrcEnabled =
+	appconfig.contentSecurityPolicyDefaultSrcEnabled;
 const protocol = sslEnabled ? 'https' : 'http';
 
 /**
@@ -84,17 +86,24 @@ async function startExplorer() {
 	explorer.getApp().use(helmet.noSniff());
 	/* eslint-disable */
 	explorer.getApp().use(helmet.frameguard({ action: 'SAMEORIGIN' }));
+
+	const contentSecurityPolicyWithoutDefaultSrc = {
+		styleSrc: ["'self'", "'unsafe-inline'"],
+		scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'"],
+		objectSrc: ["'self'"],
+		frameSrc: ["'self'"],
+		fontSrc: ["'self'"],
+		imgSrc: ["'self' data: https:; "]
+	};
+
 	explorer.getApp().use(
 		helmet.contentSecurityPolicy({
-			directives: {
-				defaultSrc: ["'self'"],
-				styleSrc: ["'self'", "'unsafe-inline'"],
-				scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'"],
-				objectSrc: ["'self'"],
-				frameSrc: ["'self'"],
-				fontSrc: ["'self'"],
-				imgSrc: ["'self' data: https:; "]
-			}
+			directives: contentSecurityPolicyDefaultSrcEnabled
+				? {
+						defaultSrc: ["'self'"],
+						...contentSecurityPolicyWithoutDefaultSrc
+				  }
+				: contentSecurityPolicyWithoutDefaultSrc
 		})
 	);
 	/* eslint-enable */
