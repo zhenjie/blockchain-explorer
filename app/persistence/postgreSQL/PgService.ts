@@ -20,6 +20,7 @@
 import { Client } from 'pg';
 import { Sequelize } from 'sequelize';
 import * as fs from 'fs';
+import Pool from 'pg-pool';
 import { helper } from '../../common/helper';
 
 const logger = helper.getLogger('PgService');
@@ -85,7 +86,10 @@ export class PgService {
 
 		logger.info(`connecting to Postgresql ${connectionString}`);
 
-		this.client = new Client(this.pgconfig);
+		this.client = new Pool(this.pgconfig);
+		this.client.on('error', err => {
+			logger.error('db error:', err);
+		});
 	}
 
 	/**
